@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.ipeer.iMap.GZIP.GZIPReader;
+import com.ipeer.iMap.ZLIB.ZLIBReader;
 
 public class Engine {
 
@@ -16,12 +17,7 @@ public class Engine {
 			System.out.println(a+", "+b);
 			fa = new File(a);
 			fb = new File(b);
-			try {
-				fb.createNewFile();
-			} catch (IOException e) {
-				System.out.println("Can't create directories!");
-				e.printStackTrace();
-			}
+			fb.mkdirs();
 		}
 		else {
 			System.out.println("INVALID ARGUMENTS!");
@@ -30,7 +26,17 @@ public class Engine {
 
 		try {
 			GZIPReader g = new GZIPReader(fa, fb);
-			g.unzip();
+			g.decompress();
+		}
+		catch (IOException i) {
+			System.out.println("Error: "+i.getMessage()+"\nAttempting to decompress using Zlib");
+			if (i.getMessage().contains("Not in GZIP format"))
+				try {
+					new ZLIBReader(fa, fb).decompress();
+				} catch (Exception e) {
+					System.out.println("Can't do that for ye.");
+					e.printStackTrace();
+				}
 		}
 		catch (Exception e) {
 			System.out.println("I CANAE DO EHT CAPT'N!");

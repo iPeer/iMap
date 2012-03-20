@@ -18,14 +18,14 @@ public class GZIPReader {
 		this.out = new FileOutputStream(out);
 	}
 	
-	public void unzip() throws IOException {
+	public void decompress() throws IOException {
 		try {
 			System.out.println("DECOMPRESSING...");
 			this.in = new GZIPInputStream(this.in);
 			byte[] buffer = new byte[65536];
-			int noRead;
-			if ((noRead = this.in.read(buffer)) != -1)
-				this.out.write(buffer, 0, noRead);
+			int len;
+			if ((len = this.in.read(buffer)) != -1)
+				this.out.write(buffer, 0, len);
 		}
 		finally {
 			System.out.println("I HAVE DONE AS YOU ASKED!");
